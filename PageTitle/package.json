@@ -1,7 +1,6 @@
 {
-  "name": "logseq-plugin-pagetitle",
-  "private": true,
-  "version": "0.0.0",
+  "name": "logseq-plugin-webpagetitle",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -18,5 +17,6 @@
   "dependencies": {
     "get-urls": "^11.0.0",
     "vite-plugin-logseq": "^1.1.2"
-  }
+  },
+  "license": "Apache-2.0"
 }
