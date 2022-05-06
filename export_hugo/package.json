@@ -1,0 +1,23 @@
+{
+  "name": "export to hugo",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "main": "dist/index.html",
+  "devDependencies": {
+    "@logseq/libs": "latest",
+    "vite": "^2.9.5"
+  },
+  "logseq": {
+    "id": "logseq-export_hugo_im3ruv4ub"
+  },
+  "dependencies": {
+    "file-saver": "^2.0.5",
+    "jszip": "^3.9.1",
+    "vite-plugin-logseq": "^1.1.2"
+  }
+}
