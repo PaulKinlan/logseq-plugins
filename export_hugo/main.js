@@ -29,7 +29,7 @@ function collateContentFromBlock(blocks, depth = 0) {
 }
 
 function slugify(text) {
-  return text.toLowerCase().replaceAll(/[ ,.]/g, "-");
+  return text.toLowerCase().replaceAll(/[ ,.]/g, "-").replaceAll("--", "-");
 }
 
 async function exportJournal(journalEntries) {
@@ -40,15 +40,21 @@ async function exportJournal(journalEntries) {
     const pageBlocks = await logseq.Editor.getPageBlocksTree(originalName);
 
     let content = collateContentFromBlock(pageBlocks);
+
+    if (content.trim() == "*") {
+      continue;
+    }
+    // don't output if journal is empty
+
     content = content.replaceAll(/\[\[([^\]]*)\]\]/gi, (match, p1) => {
-      console.log(match, p1);
-      return `[${p1}](page/${slugify(p1)})`;
+      return `[${p1}](../entry/${slugify(p1)})`;
     });
     const output = `
 ---
-title: ${name} 
+title: ${originalName} 
 date: ${new Date(createdAt).toISOString()}
 slug: ${slugify(name)}
+type: journal
 ---
 ${content}
 `;
@@ -72,21 +78,21 @@ async function exportPages(pageEntries) {
     const pageBlocks = await logseq.Editor.getPageBlocksTree(originalName);
     let content = collateContentFromBlock(pageBlocks);
     content = content.replaceAll(/\[\[([^\]]*)\]\]/gi, (match, p1) => {
-      console.log(match, p1);
-      return `[${p1}](page/${slugify(p1)})`;
+      return `[${p1}](../entry/${slugify(p1)})`;
     });
     // path < load the file.
     const output = `
 ---
-title: ${name} 
+title: ${originalName} 
 date: ${new Date(createdAt).toISOString()}
-slug: post/${slugify(name)}
+type: entry
+slug: ${slugify(name)}
 ---
 ${content}
 `;
 
     pageFiles.push({
-      fileName: `post/${slugify(name)}.md`,
+      fileName: `entry/${slugify(name)}.md`,
       originalName,
       name,
       content: output,
@@ -109,15 +115,8 @@ async function exportToHugo() {
   pagesMarkdown.forEach((file) => zip.file(file.fileName, file.content));
 
   zip.generateAsync({ type: "blob" }).then(function (content) {
-    console.log(content)
-    saveAs(content, "publicExport.zip")
+    saveAs(content, "publicExport.zip");
   });
-
-  //Once we have the pages, we need to go through them and fix cross referening
-
-  console.log(journalMarkdown);
-  console.log(pagesMarkdown);
-  // convert all the entries to actual files.
 }
 
 function main() {
