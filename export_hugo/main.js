@@ -78,7 +78,7 @@ async function exportPages(pageEntries) {
     const pageBlocks = await logseq.Editor.getPageBlocksTree(originalName);
     let content = collateContentFromBlock(pageBlocks);
     content = content.replaceAll(/\[\[([^\]]*)\]\]/gi, (match, p1) => {
-      return `[${p1}](../entry/${slugify(p1)})`;
+      return `[${p1}](../../entry/${slugify(p1)})`;
     });
     // path < load the file.
     const output = `
