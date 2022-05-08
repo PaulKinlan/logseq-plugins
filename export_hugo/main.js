@@ -102,21 +102,44 @@ ${content}
   return pageFiles;
 }
 
+async function writeFile(baseDirectory, file) {
+  // NOTE: Path
+  return await top.apis.doAction([
+    "writeFile",
+    "",
+    `${baseDirectory}/${file.fileName}`,
+    file.content,
+  ]);
+}
+
+async function mkdir(baseDirectory, directory) {
+  // NOTE: Path
+  return await top.apis.doAction(["mkdir", `${baseDirectory}/${directory}`]);
+}
+
 async function exportToHugo() {
   console.log("exportToHugo");
+
+  const outputDirectorys = await top.apis.doAction(["openDir", ""]);
+  const { path } = outputDirectorys[0];
+
+  try {
+    await mkdir(path, "entry");
+  } catch (er) {
+    console.log(er);
+  }
 
   const { journal, pages } = await partionPages();
   const journalMarkdown = await exportJournal(journal);
   const pagesMarkdown = await exportPages(pages);
 
-  const zip = new JSZip();
+  for (const file of journalMarkdown) {
+    await writeFile(path, file);
+  }
 
-  journalMarkdown.forEach((file) => zip.file(file.fileName, file.content));
-  pagesMarkdown.forEach((file) => zip.file(file.fileName, file.content));
-
-  zip.generateAsync({ type: "blob" }).then(function (content) {
-    saveAs(content, "publicExport.zip");
-  });
+  for (const file of pagesMarkdown) {
+    await writeFile(path, file);
+  }
 }
 
 function main() {
