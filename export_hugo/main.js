@@ -21,7 +21,7 @@ async function partionPages() {
 function collateContentFromBlock(blocks, depth = 0) {
   let content = "";
   for (let block of blocks) {
-    content += `${" ".repeat(depth * 2)}* ${block.content} [#](#${block.uuid})\n`;
+    content += `${" ".repeat(depth * 2)}* ${block.content} [#](#${block.uuid})<a name="${block.uuid}"></a>\n`;
     // Fetch the children
     content += collateContentFromBlock(block.children, depth + 1);
   }
@@ -140,6 +140,8 @@ async function exportToHugo() {
   for (const file of pagesMarkdown) {
     await writeFile(path, file);
   }
+
+  logseq.UI.showMsg("Export complete")
 }
 
 function main() {
