@@ -1,6 +1,4 @@
 import "@logseq/libs";
-import JSZip, { file } from "jszip";
-import { saveAs } from "file-saver";
 
 async function partionPages() {
   const allPages = await logseq.Editor.getAllPages();
