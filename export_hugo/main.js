@@ -21,7 +21,7 @@ async function partionPages() {
 function collateContentFromBlock(blocks, depth = 0) {
   let content = "";
   for (let block of blocks) {
-    content += `${" ".repeat(depth * 2)}* ${block.content} [#](#${block.uuid})<a name="${block.uuid}"></a>\n`;
+    content += `${" ".repeat(depth * 2)}* ${block.content}\n`;
     // Fetch the children
     content += collateContentFromBlock(block.children, depth + 1);
   }
