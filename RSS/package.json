@@ -10,7 +10,7 @@
   "main": "dist/index.html",
   "devDependencies": {
     "@logseq/libs": "latest",
-    "vite": "^2.9.5"
+    "vite": "^2.9.16"
   },
   "logseq": {
     "id": "kinlan_im3ruv4ub"
